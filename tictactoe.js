@@ -3,6 +3,7 @@
 (function() {
 
   const GAME_BOARD = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+  const AVAILABLE = []; //could maybe be a param passed to playturn
 
   window.addEventListener('load', init);
 
@@ -12,23 +13,42 @@
       let sq = sqaures[i];
       sq.addEventListener('click', playTurn);
       sq.id = i;
+      AVAILABLE.push(i);
     }
     console.log(GAME_BOARD);
   }
 
   function playTurn() {
     this.textContent = 'X';
-    let num = this.id;
-    let row = Math.floor(parseInt(num) / 3);
-    let colOffset = 3 * row;
-    let col = num - colOffset;
-    GAME_BOARD[row][col] = 'X';
+    let num = parseInt(this.id);
+    let position = getPosition(num);
+    GAME_BOARD[position.row][position.col] = 'X';
+    removeSpace(num);
+    //console.log(AVAILABLE);
+    //computer move with random num from available ones to pick
+    let index = Math.floor(Math.random() * AVAILABLE.length);
+    num = AVAILABLE[index];
+    id(num.toString()).textContent = 'O';
+    removeSpace(num);
+    position = getPosition(num);
+    GAME_BOARD[position.row][position.col] = 'O';
     console.log(GAME_BOARD);
-    //next do computer move with random num from available ones to pick
   }
 
-  function cat() {
+  function removeSpace(num) {
+    let index = AVAILABLE.indexOf(num);
+    //console.log(AVAILABLE);
+    AVAILABLE.splice(index, 1);
+  }
 
+  function getPosition(num) {
+    let row = Math.floor(num / 3);
+    let colOffset = 3 * row;
+    let col = num - colOffset;
+    return {
+      'row': row,
+      'col': col
+    };
   }
 
  /**
