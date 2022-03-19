@@ -8,7 +8,7 @@
   window.addEventListener('load', init);
 
   function init() {
-    let sqaures = qsa('body > p');
+    let sqaures = qsa('#board > p');
     for (let i = 0; i < sqaures.length; i++) {
       let sq = sqaures[i];
       sq.addEventListener('click', playTurn);
@@ -19,20 +19,23 @@
   }
 
   function playTurn() {
-    this.textContent = 'X';
     let num = parseInt(this.id);
-    let position = getPosition(num);
-    GAME_BOARD[position.row][position.col] = 'X';
-    removeSpace(num);
-    //console.log(AVAILABLE);
-    //computer move with random num from available ones to pick
+    updateBoard(this, num, 'X');
     let index = Math.floor(Math.random() * AVAILABLE.length);
     num = AVAILABLE[index];
-    id(num.toString()).textContent = 'O';
+    let h2 = qs('h2');
+    h2.textContent = 'CPU Turn';
+    setTimeout(function() {
+      updateBoard(id(num.toString()), num, 'O');
+      h2.textContent = 'Your Turn';
+    }, 1000);
+  }
+
+  function updateBoard(space, num, symbol) {
+    space.textContent = symbol;
+    let position = getPosition(num);
+    GAME_BOARD[position.row][position.col] = symbol;
     removeSpace(num);
-    position = getPosition(num);
-    GAME_BOARD[position.row][position.col] = 'O';
-    console.log(GAME_BOARD);
   }
 
   function removeSpace(num) {
