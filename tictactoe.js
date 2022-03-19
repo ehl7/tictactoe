@@ -32,6 +32,7 @@
   }
 
   function updateBoard(space, num, symbol) {
+    space.removeEventListener('click', playTurn);
     space.textContent = symbol;
     let position = getPosition(num);
     GAME_BOARD[position.row][position.col] = symbol;
